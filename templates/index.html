@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🐭 Professional Mouse Behavior Analyzer</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="{{ url_for('static', filename='style.css') }}" rel="stylesheet">
+</head>
+<body>
+    <!-- Hero Section -->
+    <section class="hero-section">
+        <div class="container">
+            <div class="text-center">
+                <h1 class="display-4 mb-4"><i class="fas fa-microscope"></i> Mouse Behavior Analysis Platform</h1>
+                <p class="lead mb-4">Advanced AI-powered analysis of mouse social behaviors with comprehensive project integration</p>
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-number">{{ project_data.models|length }}</div>
+                        <div class="stat-label">Trained Models</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number">{{ project_data.notebooks|length }}</div>
+                        <div class="stat-label">Analysis Notebooks</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number">{{ project_data.submissions|length }}</div>
+                        <div class="stat-label">Competition Submissions</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number">38</div>
+                        <div class="stat-label">Behavior Classes</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Main Content -->
+    <div class="container">
+        <!-- Analysis Section -->
+        <div class="card">
+            <h2><i class="fas fa-chart-line"></i> Behavior Analysis</h2>
+            <p class="text-muted">Upload your mouse tracking data or use our demo system</p>
+            
+            <div class="upload-area" id="uploadArea">
+                <i class="fas fa-cloud-upload-alt fa-3x mb-3" style="color: var(--secondary);"></i>
+                <h4>📁 Upload Mouse Tracking Data</h4>
+                <p>Supported format: CSV with video_id and frame columns</p>
+                
+                <form id="uploadForm" enctype="multipart/form-data">
+                    <input type="file" name="file" accept=".csv" required 
+                           style="margin: 20px 0; padding: 15px; border: 2px solid #ddd; border-radius: 8px; width: 100%; max-width: 400px;">
+                    <br>
+                    <button type="submit" class="btn btn-success">
+                        <i class="fas fa-rocket"></i> Analyze Behaviors
+                    </button>
+                </form>
+                
+                <div class="mt-4">
+                    <button class="btn btn-accent" onclick="downloadSample()">
+                        <i class="fas fa-download"></i> Download Sample Data
+                    </button>
+                    <button class="btn btn-warning" onclick="useDemoData()">
+                        <i class="fas fa-play"></i> Use Demo Data
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Project Files Section -->
+        <div class="project-section">
+            <div class="card">
+                <h2><i class="fas fa-folder-open"></i> Project Resources</h2>
+                
+                <!-- Models -->
+                <div class="mb-4">
+                    <h4><i class="fas fa-brain"></i> Trained Models</h4>
+                    <div class="file-grid">
+                        {% for model in project_data.models %}
+                        <div class="file-card">
+                            <div class="file-icon"><i class="fas fa-network-wired"></i></div>
+                            <h6>{{ model }}</h6>
+                            <button class="btn btn-light btn-sm" onclick="downloadFile('models', '{{ model }}')">
+                                <i class="fas fa-download"></i> Download
+                            </button>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+
+                <!-- Notebooks -->
+                <div class="mb-4">
+                    <h4><i class="fas fa-book"></i> Analysis Notebooks</h4>
+                    <div class="file-grid">
+                        {% for notebook in project_data.notebooks %}
+                        <div class="file-card">
+                            <div class="file-icon"><i class="fas fa-file-code"></i></div>
+                            <h6>{{ notebook }}</h6>
+                            <button class="btn btn-light btn-sm" onclick="downloadFile('notebooks', '{{ notebook }}')">
+                                <i class="fas fa-download"></i> Download
+                            </button>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+
+                <!-- Submissions -->
+                <div class="mb-4">
+                    <h4><i class="fas fa-trophy"></i> Competition Submissions</h4>
+                    <div class="file-grid">
+                        {% for submission in project_data.submissions %}
+                        <div class="file-card">
+                            <div class="file-icon"><i class="fas fa-file-csv"></i></div>
+                            <h6>{{ submission }}</h6>
+                            <button class="btn btn-light btn-sm" onclick="downloadFile('submissions', '{{ submission }}')">
+                                <i class="fas fa-download"></i> Download
+                            </button>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Results Section -->
+        <div id="resultSection" class="result-section">
+            <div class="card">
+                <h2><i class="fas fa-chart-bar"></i> Analysis Results</h2>
+                
+                <!-- Statistics -->
+                <div class="stats-grid" id="resultsStats"></div>
+                
+                <!-- Visualizations -->
+                <div class="visualization-container">
+                    <h4><i class="fas fa-images"></i> Behavior Analysis</h4>
+                    <div id="plotContainer"></div>
+                </div>
+
+                <!-- Sample Predictions -->
+                <div class="visualization-container">
+                    <h4><i class="fas fa-table"></i> Sample Predictions</h4>
+                    <div id="sampleTable"></div>
+                </div>
+
+                <!-- Download -->
+                <div class="text-center mt-4">
+                    <button class="btn btn-success btn-lg" onclick="downloadResults()">
+                        <i class="fas fa-download"></i> Download Full Analysis Report
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Error Alert -->
+        <div id="errorAlert" class="alert alert-error" style="display: none;"></div>
+    </div>
+
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
+</body>
+</html>
