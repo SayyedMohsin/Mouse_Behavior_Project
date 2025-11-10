@@ -1,8 +1,6 @@
-streamlit==1.36.0
-pandas==2.2.2
-numpy==2.0.0
-matplotlib==3.8.0
-plotly==5.21.0
+flask==3.0.3
+pandas==2.2.3
+numpy==2.0.2
+matplotlib==3.9.2
 seaborn==0.13.2
-scikit-learn==1.5.0
-pillow==10.3.0
+gunicorn==23.0.0
